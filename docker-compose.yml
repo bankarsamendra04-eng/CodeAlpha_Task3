@@ -1,0 +1,99 @@
+# ==============================================================================
+# AI Music Studio — Docker Compose Multi-Container Orchestration
+# Services:
+#   1. backend:  FastAPI + FluidSynth + SoundFont + SQLite/PostgreSQL Ready
+#   2. frontend: React + Vite + Nginx Reverse Proxy
+# Volumes:
+#   - studio_data:   Persistent database storage
+#   - studio_output: Persistent generated MIDI & audio files
+#   - ./models:      Host-mounted configurable trained ML models (read-only)
+# ==============================================================================
+
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai_music_studio_backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      # Server Configuration
+      HOST: "0.0.0.0"
+      PORT: "8000"
+      APP_ENV: "production"
+      DEBUG: "False"
+
+      # Persistence (Configurable Database Location)
+      DATABASE_URL: "sqlite:////app/data/ai_music_studio.db"
+
+      # Machine Learning Model Location (Configurable)
+      MODEL_DIR: "/app/models"
+      MODEL_VERSION: "v1"
+
+      # Natural Language Understanding (Optional: Uses local fallback if empty)
+      GROQ_API_KEY: "${GROQ_API_KEY:-}"
+      GROQ_MODEL: "${GROQ_MODEL:-llama-3.3-70b-versatile}"
+
+      # Security & JWT Authentication (Override with high-entropy secret in production)
+      SECRET_KEY: "${SECRET_KEY:-docker_studio_secret_key_2026_change_in_production}"
+      ACCESS_TOKEN_EXPIRE_MINUTES: "1440"
+      ALGORITHM: "HS256"
+
+      # Admin Seed Account
+      ADMIN_EMAIL: "${ADMIN_EMAIL:-admin@aimusicstudio.internal}"
+      ADMIN_PASSWORD: "${ADMIN_PASSWORD:-AdminSecurePassword123!}"
+
+      # SaaS Limits & Resource Management
+      ENFORCE_USAGE_LIMITS: "true"
+      RATE_LIMIT_GLOBAL: "100/minute"
+      RATE_LIMIT_GENERATE: "10/minute"
+
+      # Audio Synthesis (FluidSynth & SoundFont)
+      FLUIDSYNTH_PATH: "/usr/bin/fluidsynth"
+      SOUNDFONT_PATH: "/usr/share/sounds/sf2/default-GM.sf2"
+    volumes:
+      # Persistent SQLite Database
+      - studio_data:/app/data
+      # Persistent Generated Compositions (MIDI & WAV)
+      - studio_output:/app/output
+      # Host-Mounted Trained Models (Configurable location, read-only)
+      - ./models:/app/models:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+    networks:
+      - studio_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ai_music_studio_frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - studio_network
+
+volumes:
+  studio_data:
+    name: ai_music_studio_data
+    driver: local
+  studio_output:
+    name: ai_music_studio_output
+    driver: local
+
+networks:
+  studio_network:
+    name: ai_music_studio_network
+    driver: bridge

@@ -1,0 +1,47 @@
+{
+  "dataset_name": "MAESTRO v3.0.0",
+  "random_seed": 42,
+  "split_ratios": {
+    "train": 0.8,
+    "validation": 0.1,
+    "test": 0.1
+  },
+  "total_files": 1276,
+  "train": {
+    "number_of_files": 1020,
+    "percentage": 79.94,
+    "total_duration_seconds": 574015.57,
+    "total_duration_hours": 159.45,
+    "total_duration_formatted": "159h 26m 55s",
+    "number_of_events": 40819202,
+    "number_of_notes": 5235664,
+    "number_of_chords": 201084
+  },
+  "validation": {
+    "number_of_files": 128,
+    "percentage": 10.03,
+    "total_duration_seconds": 70784.96,
+    "total_duration_hours": 19.66,
+    "total_duration_formatted": "19h 39m 44s",
+    "number_of_events": 4834676,
+    "number_of_notes": 639017,
+    "number_of_chords": 26659
+  },
+  "test": {
+    "number_of_files": 128,
+    "percentage": 10.03,
+    "total_duration_seconds": 70350.95,
+    "total_duration_hours": 19.54,
+    "total_duration_formatted": "19h 32m 30s",
+    "number_of_events": 4882076,
+    "number_of_notes": 637825,
+    "number_of_chords": 25935
+  },
+  "verification": {
+    "train_val_overlap": 0,
+    "train_test_overlap": 0,
+    "val_test_overlap": 0,
+    "total_files_accounted_for": 1276,
+    "is_disjoint": true
+  }
+}

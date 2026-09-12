@@ -1,0 +1,76 @@
+{
+  "dataset_name": "MAESTRO v3.0.0 (MIDI)",
+  "dataset_path": "C:\\Users\\banka\\OneDrive\\Desktop\\maestro-v3.0.0-midi",
+  "total_midi_files": 1276,
+  "valid_files": 1276,
+  "invalid_files": 0,
+  "total_duration_seconds": 715151.48,
+  "total_duration_hours": 198.65,
+  "average_duration_seconds": 560.46,
+  "average_duration_formatted": "9m 20s",
+  "total_notes": 6512506,
+  "average_notes_per_file": 5103.8,
+  "total_chords": 253678,
+  "average_chords_per_file": 198.8,
+  "available_instruments": {
+    "Piano": 1276
+  },
+  "available_tempos": {
+    "min": 120.0,
+    "max": 120.0,
+    "median": 120.0,
+    "mean": 120.0,
+    "common_tempos": {
+      "120.0": 1276
+    }
+  },
+  "available_keys": {
+    "C minor": 90,
+    "A minor": 90,
+    "D minor": 82,
+    "C major": 80,
+    "C# minor": 74,
+    "A- major": 72,
+    "E- major": 67,
+    "D major": 65,
+    "B- major": 59,
+    "C# major": 53,
+    "F# major": 51,
+    "A major": 47,
+    "G minor": 47,
+    "B- minor": 43,
+    "G# minor": 42,
+    "F# minor": 41,
+    "F major": 40,
+    "F minor": 39,
+    "E- minor": 36,
+    "B minor": 36
+  },
+  "mode_distribution": {
+    "minor": 655,
+    "major": 621
+  },
+  "time_signatures": {
+    "4/4": 1276
+  },
+  "splits": {
+    "train": 962,
+    "test": 177,
+    "validation": 137
+  },
+  "composers_count": 60,
+  "top_composers": {
+    "Fr\u00e9d\u00e9ric Chopin": 201,
+    "Franz Schubert": 186,
+    "Ludwig van Beethoven": 146,
+    "Johann Sebastian Bach": 145,
+    "Franz Liszt": 131,
+    "Sergei Rachmaninoff": 59,
+    "Robert Schumann": 49,
+    "Claude Debussy": 45,
+    "Joseph Haydn": 40,
+    "Wolfgang Amadeus Mozart": 38
+  },
+  "parsing_errors": [],
+  "analysis_time_seconds": 71.93
+}
