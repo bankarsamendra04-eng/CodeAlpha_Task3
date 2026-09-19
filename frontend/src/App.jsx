@@ -104,17 +104,17 @@ function App() {
       return null
     }
   })
-  // Track initial authentication verification on startup/refresh
-  const [isVerifyingAuth, setIsVerifyingAuth] = useState(() => Boolean(localStorage.getItem("aimusic_token")))
+  // Track initial authentication verification on startup/refresh (only block if user profile not cached)
+  const [isVerifyingAuth, setIsVerifyingAuth] = useState(() => Boolean(localStorage.getItem("aimusic_token")) && !localStorage.getItem("aimusic_user"))
   const [currentView, setCurrentView] = useState(() => {
     const savedToken = localStorage.getItem("aimusic_token")
-    if (!savedToken) return "login"
+    if (!savedToken) return "studio"
     try {
       const savedUser = JSON.parse(localStorage.getItem("aimusic_user"))
       if (savedUser?.role === "ADMIN") return "admin"
       return "studio"
     } catch {
-      return "login"
+      return "studio"
     }
   })
   const [showAuthModal, setShowAuthModal] = useState(false)
@@ -459,7 +459,6 @@ function App() {
       if (!storedToken) {
         setToken("")
         setCurrentUser(null)
-        setCurrentView("login")
         setIsVerifyingAuth(false)
         return
       }
@@ -882,7 +881,7 @@ function App() {
   }
 
   // 2. Unauthenticated Gatekeeper: Standalone Login / Register View
-  if (currentView === "login" || !currentUser || !token) {
+  if (currentView === "login") {
     return (
       <div className="auth-screen-container">
         <header className="auth-screen-nav">

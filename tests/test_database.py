@@ -7,6 +7,7 @@ from unittest.mock import patch
 from fastapi.testclient import TestClient
 
 from backend.main import app
+import backend.services.music_pipeline
 from backend.database.connection import SessionLocal, init_db, engine
 from backend.database.models import (
     User,

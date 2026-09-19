@@ -11,6 +11,8 @@ describe("Frontend AI Music Studio Component Tests", () => {
   beforeEach(() => {
     mockFetch.mockReset()
     localStorage.clear()
+    localStorage.setItem("aimusic_token", "fake-test-jwt-token")
+    localStorage.setItem("aimusic_user", JSON.stringify({ id: "user-1", username: "testcreator", role: "USER" }))
 
     // Default health check response
     mockFetch.mockImplementation((url) => {
@@ -21,6 +23,40 @@ describe("Frontend AI Music Studio Component Tests", () => {
             Promise.resolve({
               status: "healthy",
               components: { api: "ok", database: "ok" },
+            }),
+        })
+      }
+      if (url === "/api/auth/me") {
+        return Promise.resolve({
+          ok: true,
+          json: () =>
+            Promise.resolve({
+              id: "user-1",
+              username: "testcreator",
+              email: "test@studio.ai",
+              role: "USER",
+            }),
+        })
+      }
+      if (url.includes("/api/subscription/me")) {
+        return Promise.resolve({
+          ok: true,
+          json: () =>
+            Promise.resolve({
+              plan: "FREE",
+              tier: "FREE",
+              generations_used: 0,
+              quota_limit: 50,
+            }),
+        })
+      }
+      if (url.includes("/api/plans")) {
+        return Promise.resolve({
+          ok: true,
+          json: () =>
+            Promise.resolve({
+              total_plans: 3,
+              plans: [],
             }),
         })
       }
@@ -258,6 +294,8 @@ describe("Frontend AI Music Studio Component Tests", () => {
   })
 
   it("opens and handles authentication modal for login and registration", async () => {
+    localStorage.removeItem("aimusic_token")
+    localStorage.removeItem("aimusic_user")
     render(<App />)
     const signInBtn = screen.getByText(/Admin \/ Sign In/i)
     fireEvent.click(signInBtn)
@@ -271,7 +309,7 @@ describe("Frontend AI Music Studio Component Tests", () => {
     fireEvent.click(createAccountTab)
 
     expect(screen.getByText("Email Address")).toBeDefined()
-    expect(screen.getByText("Account Role")).toBeDefined()
+    expect(screen.getByText("Confirm Password")).toBeDefined()
 
     // Close modal
     const cancelBtn = screen.getByRole("button", { name: /cancel/i })

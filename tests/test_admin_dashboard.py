@@ -15,6 +15,7 @@ Tests all 11 admin intelligence requirements:
 Plus role protection (401 without token, 403 with USER role, 200 with ADMIN role).
 """
 
+import uuid
 import pytest
 from datetime import datetime, timezone
 from fastapi.testclient import TestClient
@@ -42,7 +43,7 @@ def test_users():
     """Create test admin and normal user accounts with JWT tokens."""
     db = SessionLocal()
     try:
-        ts = int(datetime.now(timezone.utc).timestamp())
+        ts = f"{int(datetime.now(timezone.utc).timestamp())}_{uuid.uuid4().hex[:8]}"
         admin_username = f"admin_dash_{ts}"
         admin = User(
             username=admin_username,
